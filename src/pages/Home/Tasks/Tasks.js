@@ -40,6 +40,7 @@ const Tasks = () => {
                                             <th>#</th>
                                             <th>Name</th>
                                             <th>Description</th>
+                                            <th>Completed!</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
