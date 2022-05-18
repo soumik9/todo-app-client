@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, FloatingLabel, Form } from 'react-bootstrap'
+import { Container, Row, Col, Form } from 'react-bootstrap'
 import { RiLoginCircleLine } from 'react-icons/ri'
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -31,12 +31,14 @@ const Login = () => {
 
                                 <div>
                                     <Form.Label htmlFor="email" className='ps-1'>Email</Form.Label>
-                                    <Form.Control type="email" {...register('email')} placeholder='Your Email' />
+                                    <Form.Control type="email" {...register('email', { required: true })} placeholder='Your Email' />
+                                    {errors.email && <p className='p-0 text-danger text-center'>Email is required.</p>}
                                 </div>
 
                                 <div className='mt-4'>
-                                    <Form.Label htmlFor="passowrd" className='ps-1'>Passowrd</Form.Label>
-                                    <Form.Control type="passowrd" {...register('passowrd')} placeholder='Your Passowrd' />
+                                    <Form.Label htmlFor="password" className='ps-1'>Password</Form.Label>
+                                    <Form.Control type="passowrd" {...register('password', { required: true })} placeholder='Your Password' />
+                                    {errors.password && <p className='p-0 text-danger text-center'>Password is required.</p>}
                                 </div>
                         
 
@@ -56,7 +58,6 @@ const Login = () => {
                             <div className="form__detail mt-3 d-flex justify-content-center">
                                 <div>
                                     <p>If you haven't account <Link to="/register">Create account here</Link></p>
-                                    <p className='text-center'>Forgot Password <Link to="/reset">Reset here</Link></p>
                                 </div>
                             </div>
 

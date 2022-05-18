@@ -3,12 +3,19 @@ import { Container, Row, Col, Form } from 'react-bootstrap'
 import { RiLoginCircleLine } from 'react-icons/ri'
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
 import SocialLogin from './SocialLogin';
 import './auth.css'
+import auth from '../../firebase.init';
+import Loading from '../Shared/Loading/Loading';
 
 const Register = () => {
 
     const { register, handleSubmit, formState: { errors }, } = useForm();
+    const [createUserWithEmailAndPassword, user, loading, error,] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true});
+    const [updateProfile, updating, uerror] = useUpdateProfile(auth);
+
+    if(loading || updating) {return <Loading />}
 
     const handleRegister = (data) => {
         console.log(data);
@@ -54,7 +61,7 @@ const Register = () => {
                                 </div>
 
                                 <button className='btn form__btn mt-4' type="submit">
-                                    Login
+                                    Register
                                     <RiLoginCircleLine className='form__btn-icon' />
                                 </button>
                             </form>
