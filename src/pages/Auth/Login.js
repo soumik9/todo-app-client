@@ -1,17 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap'
 import { RiLoginCircleLine } from 'react-icons/ri'
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import SocialLogin from './SocialLogin';
 import './auth.css'
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
+import Loading from '../Shared/Loading/Loading';
 
 const Login = () => {
 
     const { register, handleSubmit, formState: { errors }, } = useForm();
+    const [signInWithEmailAndPassword, user, loading, error,] = useSignInWithEmailAndPassword(auth);
 
-    const handleLogin = (data) => {
-        console.log(data);
+    let loginErrorMessage;
+    const navigate = useNavigate();
+    const location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+
+    useEffect( () => {
+        if(user){
+            navigate(from, { replace: true });
+        }
+    }, [user, navigate, from])
+
+    // loading
+    if(loading){ return <Loading />}
+
+    // error checking
+    if (error) {
+        loginErrorMessage = <p className='text-danger text-center mt-4'>{error?.message}</p>
+    }
+
+    const handleLogin = ({ email, password }) => {
+        signInWithEmailAndPassword(email, password);
     }
 
     return (
@@ -23,7 +46,10 @@ const Login = () => {
                         <div className="card" >
 
                             <div className="d-flex justify-content-center mb-4">
-                                <div><h2 className="form__title ">Login</h2></div>
+                                <div className='text-center'>
+                                    <h2 className="form__title ">Login</h2>
+                                    {loginErrorMessage}
+                                </div>
                             </div>
 
 
@@ -37,10 +63,10 @@ const Login = () => {
 
                                 <div className='mt-4'>
                                     <Form.Label htmlFor="password" className='ps-1'>Password</Form.Label>
-                                    <Form.Control type="passowrd" {...register('password', { required: true })} placeholder='Your Password' />
+                                    <Form.Control type="password" {...register('password', { required: true })} placeholder='Your Password' />
                                     {errors.password && <p className='p-0 text-danger text-center'>Password is required.</p>}
                                 </div>
-                        
+
 
                                 <div className="form__terms d-flex justify-content-center">
                                     <Form.Group className="my-3" id="formGridCheckbox">
