@@ -32,8 +32,8 @@ const TaskRow = ({ task, index, refetch }) => {
     return (
         <tr className='align-middle'>
             <td>{index + 1}</td>
-            <td>{name}</td>
-            <td>{description}</td>
+            <td>{status === 'active' ? name : <s>name</s>}</td>
+            <td>{status === 'active' ? description : <s>description</s>}</td>
             <td>
                 {
                     status === 'active' ? <button type='button' className='btn btn-outline-info completed-btn' onClick={handleTaskStatus}>Click to Completed</button> : <button type='button' className='btn btn-outline-secondary completed-btn' disabled>Completed</button>
