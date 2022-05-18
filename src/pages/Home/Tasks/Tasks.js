@@ -1,8 +1,16 @@
 import React from 'react';
 import { Card, Col, Container, Row, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query'
+import TaskRow from '../TaskRow/TaskRow';
+import Loading from '../../Shared/Loading/Loading';
 
 const Tasks = () => {
+
+    const {data: tasks, isLoading} = useQuery('task', () => fetch('https://todo-app-9.herokuapp.com/tasks').then(res => res.json()));
+    
+    if(isLoading) {return <Loading />}
+
     return (
         <section className="tasks my-50">
             <Container>
@@ -32,15 +40,17 @@ const Tasks = () => {
                                             <th>#</th>
                                             <th>Name</th>
                                             <th>Description</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                        </tr>
-  
+                                        {
+                                            tasks.map((task, index) => <TaskRow
+                                                key={task._id}
+                                                index={index}
+                                                task={task}
+                                            />)
+                                        }
                                     </tbody>
                                 </Table>
                             </div>

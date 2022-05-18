@@ -15,3 +15,7 @@
   color: #005555 !important;
   background-color: #A1E3D8 !important;
 }
+
+.btn-outline-info:hover {
+  color: #FFF !important;
+}
