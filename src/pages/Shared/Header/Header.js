@@ -24,7 +24,7 @@ const Header = () => {
                     <Navbar.Text className='text-white'>
                         Signed in as: <span className='signinas'>{user?.displayName}</span> 
                     </Navbar.Text>
-                    <button type='button' onClick={handleLogout} className='btn ms-3'>Logout</button>
+                    <button type='button' onClick={handleLogout} className='btn btn-task ms-3'>Logout</button>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

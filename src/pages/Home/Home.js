@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../Shared/Header/Header';
+import Tasks from './Tasks/Tasks';
 
 const Home = () => {
 
@@ -7,6 +8,7 @@ const Home = () => {
     return (
         <div>
            <Header />
+           <Tasks />
         </div>
     );
 };

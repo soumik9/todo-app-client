@@ -1,0 +1,8 @@
+.tasks .card {
+
+}
+
+.task__header .task__title {
+    text-transform: uppercase;
+    color: #069A8E;
+}
