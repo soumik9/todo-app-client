@@ -4,6 +4,7 @@ import Home from './pages/Home/Home';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import { Toaster } from 'react-hot-toast';
+import RequiredAuth from './pages/Shared/RequiredAuth/RequireAuth';
 
 function App() {
   return (
@@ -12,7 +13,13 @@ function App() {
       <Toaster />
 
       <Routes>
-        <Route path="/" element={<Home />} />
+
+        <Route path="/" element={
+          <RequiredAuth>
+            <Home />
+          </RequiredAuth>
+        } />
+        
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
