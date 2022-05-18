@@ -1,0 +1,18 @@
+.navbar{
+    background-color: #069A8E;
+}
+
+.navbar .navbar-brand:hover{
+    color: #005555;
+    letter-spacing: 1px;
+    transition: .5s ease-in-out;
+}
+
+.signinas{
+    color: #F7FF93;
+}
+
+.navbar .btn{
+    color: #005555;
+    background-color: #A1E3D8;
+}

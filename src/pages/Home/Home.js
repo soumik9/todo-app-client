@@ -1,21 +1,12 @@
-import { signOut } from 'firebase/auth';
 import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import auth from '../../firebase.init';
+import Header from '../Shared/Header/Header';
 
 const Home = () => {
 
-    const [user] = useAuthState(auth);
-
-    const handleLogout = () =>{
-        signOut(auth);
-        localStorage.removeItem('accessToken');
-    }
 
     return (
         <div>
-            hi {user?.displayName}
-            <button type='button' onClick={handleLogout}>Logout</button>
+           <Header />
         </div>
     );
 };
