@@ -4,12 +4,16 @@ import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query'
 import TaskRow from '../TaskRow/TaskRow';
 import Loading from '../../Shared/Loading/Loading';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../../firebase.init';
 
 const Tasks = () => {
 
-    const {data: tasks, isLoading, refetch} = useQuery('task', () => fetch('https://todo-app-9.herokuapp.com/tasks').then(res => res.json()));
-    
-    if(isLoading) {return <Loading />}
+    const [user] = useAuthState(auth);
+    const email = user?.email;
+    const { data: tasks, isLoading, refetch } = useQuery('task', () => fetch(`https://todo-app-9.herokuapp.com/tasks?email=${email}`).then(res => res.json()));
+
+    if (isLoading) { return <Loading /> }
 
     return (
         <section className="tasks my-50">
@@ -34,27 +38,32 @@ const Tasks = () => {
                             <hr />
 
                             <div className="task__body mt-5 card p-4">
-                                <Table responsive>
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Completed!</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            tasks.map((task, index) => <TaskRow
-                                                key={task._id}
-                                                index={index}
-                                                task={task}
-                                                refetch={refetch}
-                                            />)
-                                        }
-                                    </tbody>
-                                </Table>
+                                {
+                                    tasks.length > 0 ? (
+                                        <Table responsive>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Name</th>
+                                                    <th>Description</th>
+                                                    <th>Completed!</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    tasks.map((task, index) => <TaskRow
+                                                        key={task._id}
+                                                        index={index}
+                                                        task={task}
+                                                        refetch={refetch}
+                                                    />)
+                                                }
+                                            </tbody>
+                                        </Table>
+                                    ) : <p className='text-center'>You have no task <Link to='add-task'>Please Add</Link></p>
+                                }
+
                             </div>
 
                         </Card>

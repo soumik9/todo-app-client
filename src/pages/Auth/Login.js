@@ -3,36 +3,37 @@ import { Container, Row, Col, Form } from 'react-bootstrap'
 import { RiLoginCircleLine } from 'react-icons/ri'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import SocialLogin from './SocialLogin';
-import './auth.css'
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import {FcGoogle} from 'react-icons/fc'
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
 import Loading from '../Shared/Loading/Loading';
 import useToken from '../../hooks/useToken';
+import './auth.css'
 
 const Login = () => {
 
     const { register, handleSubmit, formState: { errors }, } = useForm();
     const [signInWithEmailAndPassword, user, loading, error,] = useSignInWithEmailAndPassword(auth);
-    const [token] = useToken(user);
+    const [signInWithGoogle, guser, gloading, gerror] = useSignInWithGoogle(auth);
+    const [token] = useToken(user || guser);
 
     let loginErrorMessage;
     const navigate = useNavigate();
     const location = useLocation();
     let from = location.state?.from?.pathname || "/";
 
-    useEffect( () => {
-        if(token){
+    useEffect(() => {
+        if (token) {
             navigate(from, { replace: true });
         }
     }, [token, navigate, from])
 
     // loading
-    if(loading){ return <Loading />}
+    if (loading || gloading) { return <Loading /> }
 
     // error checking
-    if (error) {
-        loginErrorMessage = <p className='text-danger text-center mt-4'>{error?.message}</p>
+    if (error || gerror) {
+        loginErrorMessage = <p className='text-danger text-center mt-4'>{error?.message || gerror?.message}</p>
     }
 
     const handleLogin = ({ email, password }) => {
@@ -53,7 +54,6 @@ const Login = () => {
                                     {loginErrorMessage}
                                 </div>
                             </div>
-
 
                             <form onSubmit={handleSubmit(handleLogin)}>
 
@@ -96,7 +96,13 @@ const Login = () => {
                             </div>
 
                             {/* social login components */}
-                            <SocialLogin></SocialLogin>
+                            <div className="form__socials mt-4">
+                                <div>
+                                    <button className='w-100 py-3 google-btn' onClick={() => signInWithGoogle()}>
+                                        <FcGoogle className='form__socials-icon google__icon me-2' /> Google Sign In
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                     </Col>
