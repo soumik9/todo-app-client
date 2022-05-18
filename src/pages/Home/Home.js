@@ -9,6 +9,7 @@ const Home = () => {
 
     const handleLogout = () =>{
         signOut(auth);
+        localStorage.removeItem('accessToken');
     }
 
     return (

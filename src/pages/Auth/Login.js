@@ -8,11 +8,13 @@ import './auth.css'
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
 import Loading from '../Shared/Loading/Loading';
+import useToken from '../../hooks/useToken';
 
 const Login = () => {
 
     const { register, handleSubmit, formState: { errors }, } = useForm();
     const [signInWithEmailAndPassword, user, loading, error,] = useSignInWithEmailAndPassword(auth);
+    const [token] = useToken(user);
 
     let loginErrorMessage;
     const navigate = useNavigate();
@@ -20,10 +22,10 @@ const Login = () => {
     let from = location.state?.from?.pathname || "/";
 
     useEffect( () => {
-        if(user){
+        if(token){
             navigate(from, { replace: true });
         }
-    }, [user, navigate, from])
+    }, [token, navigate, from])
 
     // loading
     if(loading){ return <Loading />}
