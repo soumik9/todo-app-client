@@ -9,6 +9,7 @@ import auth from '../../firebase.init';
 import Loading from '../Shared/Loading/Loading';
 import useToken from '../../hooks/useToken';
 import './auth.css'
+import toast from 'react-hot-toast';
 
 const Login = () => {
 
@@ -25,6 +26,7 @@ const Login = () => {
     useEffect(() => {
         if (token) {
             navigate(from, { replace: true });
+            toast.success('Welcome to dashboard!', { duration: 2000, position: 'top-right' });
         }
     }, [token, navigate, from])
 

@@ -27,7 +27,7 @@ const Register = () => {
     useEffect( () => {
         if(token){
             navigate(from, { replace: true });
-            toast.success('Successfully user created! Login Now', { duration: 2000, position: 'top-right' });
+            toast.success('User created!', { duration: 2000, position: 'top-right' });
         }
     }, [token, navigate, from])
 

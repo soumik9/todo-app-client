@@ -1,17 +1,37 @@
 import React from 'react';
 import { Card, Col, Container, Row, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query'
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { signOut } from 'firebase/auth';
+import auth from '../../../firebase.init';
 import TaskRow from '../TaskRow/TaskRow';
 import Loading from '../../Shared/Loading/Loading';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import auth from '../../../firebase.init';
+import toast from 'react-hot-toast';
 
 const Tasks = () => {
 
     const [user] = useAuthState(auth);
     const email = user?.email;
-    const { data: tasks, isLoading, refetch } = useQuery('task', () => fetch(`https://todo-app-9.herokuapp.com/tasks?email=${email}`).then(res => res.json()));
+    const navigate = useNavigate();
+
+    const url = `https://todo-app-9.herokuapp.com/tasks?email=${email}`
+
+    const { data: tasks, isLoading, refetch } = useQuery('tasks', () => fetch(url, {
+        method: 'GET',
+        headers: {
+            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    }).then(res => {
+            if(res.status === 403 || res.status === 401){
+                signOut(auth);
+                localStorage.removeItem('accessToken');
+                navigate('/login');
+                toast.success('Forbidden !', { duration: 2000, position: 'top-right' });
+            }
+            return res.json()
+        }  
+    ));
 
     if (isLoading) { return <Loading /> }
 
@@ -39,7 +59,8 @@ const Tasks = () => {
 
                             <div className="task__body mt-5 card p-4">
                                 {
-                                    tasks.length > 0 ? (
+                                    tasks.length === 0 ? <p className='text-center'>You have no task <Link to='add-task'>Please Add</Link></p> 
+                                    : (
                                         <Table responsive>
                                             <thead>
                                                 <tr>
@@ -61,7 +82,7 @@ const Tasks = () => {
                                                 }
                                             </tbody>
                                         </Table>
-                                    ) : <p className='text-center'>You have no task <Link to='add-task'>Please Add</Link></p>
+                                    )
                                 }
 
                             </div>
