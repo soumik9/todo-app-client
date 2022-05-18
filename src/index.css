@@ -6,6 +6,11 @@
   margin: 50px 0;
 }
 
+.task-title{
+  text-transform: uppercase;
+  color: #069A8E;
+}
+
 .btn-task{
   color: #005555 !important;
   background-color: #A1E3D8 !important;

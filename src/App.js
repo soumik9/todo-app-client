@@ -5,6 +5,7 @@ import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import { Toaster } from 'react-hot-toast';
 import RequiredAuth from './pages/Shared/RequiredAuth/RequireAuth';
+import AddTask from './pages/AddTask.js/AddTask';
 
 function App() {
   return (
@@ -17,6 +18,12 @@ function App() {
         <Route path="/" element={
           <RequiredAuth>
             <Home />
+          </RequiredAuth>
+        } />
+
+        <Route path="/add-task" element={
+          <RequiredAuth>
+            <AddTask />
           </RequiredAuth>
         } />
         
