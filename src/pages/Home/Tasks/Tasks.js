@@ -7,7 +7,7 @@ import Loading from '../../Shared/Loading/Loading';
 
 const Tasks = () => {
 
-    const {data: tasks, isLoading} = useQuery('task', () => fetch('https://todo-app-9.herokuapp.com/tasks').then(res => res.json()));
+    const {data: tasks, isLoading, refetch} = useQuery('task', () => fetch('https://todo-app-9.herokuapp.com/tasks').then(res => res.json()));
     
     if(isLoading) {return <Loading />}
 
@@ -49,6 +49,7 @@ const Tasks = () => {
                                                 key={task._id}
                                                 index={index}
                                                 task={task}
+                                                refetch={refetch}
                                             />)
                                         }
                                     </tbody>

@@ -29,15 +29,15 @@ const AddTaskBody = () => {
             },
             body: JSON.stringify(task)
         })
-            .then(res => res.json())
-            .then(inserted => {
-                if (inserted.insertedId) {
-                    toast.success('Task added!', { duration: 2000, position: 'top-right' });
-                    reset();
-                } else {
-                    toast.error('Failed!', { duration: 2000, position: 'top-right' });
-                }
-            })
+        .then(res => res.json())
+        .then(inserted => {
+            if (inserted.insertedId) {
+                toast.success('Task added!', { duration: 2000, position: 'top-right' });
+                reset();
+            } else {
+                toast.error('Failed!', { duration: 2000, position: 'top-right' });
+            }
+        })
     }
 
     return (
