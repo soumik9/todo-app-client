@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap'
 import { RiLoginCircleLine } from 'react-icons/ri'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
+import toast from 'react-hot-toast';
 import SocialLogin from './SocialLogin';
 import './auth.css'
 import auth from '../../firebase.init';
 import Loading from '../Shared/Loading/Loading';
+import { signOut } from 'firebase/auth';
 
 const Register = () => {
 
@@ -15,12 +17,28 @@ const Register = () => {
     const [createUserWithEmailAndPassword, user, loading, error,] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true});
     const [updateProfile, updating, uerror] = useUpdateProfile(auth);
 
-    if(loading || updating) {return <Loading />}
+    let loginErrorMessage;
+    const navigate = useNavigate();
 
-    const handleRegister = (data) => {
-        console.log(data);
+    useEffect( () => {
+        if(user){
+            signOut(auth);
+            navigate('/login');
+            toast.success('Successfully user created! Login Now', { duration: 2000, position: 'top-right' });
+        }
+    }, [user, navigate])
+
+    if(error || uerror){
+        loginErrorMessage = <p className='text-danger text-center mt-4'>{error?.message || uerror?.message}</p>
     }
 
+    if(loading || updating) {return <Loading />}
+
+  
+    const handleRegister = async ({ name, email, password }) => {
+        await createUserWithEmailAndPassword(email, password);
+        await updateProfile({displayName: name});
+    }
 
     return (
         <div className='auth py-5'>
@@ -31,7 +49,10 @@ const Register = () => {
                         <div className="card" >
 
                             <div className="d-flex justify-content-center mb-4">
-                                <div><h2 className="form__title ">Register</h2></div>
+                                <div className='text-center'>
+                                    <h2 className="form__title ">Register</h2>
+                                    {loginErrorMessage}
+                                </div>
                             </div>
 
 
