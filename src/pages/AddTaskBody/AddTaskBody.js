@@ -2,17 +2,42 @@ import React from 'react';
 import { Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { RiLoginCircleLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import auth from '../../firebase.init';
 
 const AddTaskBody = () => {
 
-    const { register, handleSubmit, formState: { errors }, } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [user] = useAuthState(auth);
 
     const handleAddTask = data => {
-        console.log(data);
+        const task = {
+            email: data.email,
+            name: data.name,
+            description: data.description,
+            status: data.status
+        }
+
+        //send to data base
+        fetch('https://todo-app-9.herokuapp.com/add-task', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                //authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify(task)
+        })
+            .then(res => res.json())
+            .then(inserted => {
+                if (inserted.insertedId) {
+                    toast.success('Task added!', { duration: 2000, position: 'top-right' });
+                    reset();
+                } else {
+                    toast.error('Failed!', { duration: 2000, position: 'top-right' });
+                }
+            })
     }
 
     return (
@@ -40,7 +65,7 @@ const AddTaskBody = () => {
                             <div className="task__body mt-5 card p-4">
                                 <form onSubmit={handleSubmit(handleAddTask)}>
 
-                                    <input type="hidden" {...register('status')} value='active'  />
+                                    <input type="hidden" {...register('status')} value='active' />
 
                                     <div>
                                         <Form.Label htmlFor="email" className='ps-1'>Email</Form.Label>
