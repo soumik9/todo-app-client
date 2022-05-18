@@ -1,6 +1,6 @@
 # Today TODO App
 
-To explore Today TODO app [Click Here](https://todo-app-5e2b6.web.app/).
+To explore Todays TODO app [Click Here](https://todo-app-5e2b6.web.app/).
 
 ## Features
 
